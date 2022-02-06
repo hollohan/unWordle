@@ -96,7 +96,7 @@ if __name__=='__main__':
         print('\nPossible Answers')
         print('-------- -------')
         for thing in p[:5]: print(thing)
-        print(f'and {len(p) - 5} more')
+        print(f'and {len(p[:5])} more')
         
 
 
