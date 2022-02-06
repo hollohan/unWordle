@@ -1,5 +1,5 @@
 # unWordle
-...is an assistant for solving Worlde puzzles.
+...is an assistant for solving Wordle puzzles.
 
 When prompted, input the word you have tried followed by the result from Wordle.  The result must be a string of 5 characters.  Valid characters are x, p, and -, for exact, potential, and no match.
 
