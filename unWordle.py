@@ -125,7 +125,7 @@ if __name__=='__main__':
     game_counter = 0
     num_solved = 0
     turns = []
-    auto = True
+    auto = False
 
     while True:
 
