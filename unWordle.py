@@ -100,9 +100,9 @@ class unWordle():
         ans_num = 0
         guessed = []
         while True:
-            if ans_num == 0:    word='arose'
-            elif ans_num == 1:  word='until'
-            elif ans_num == 2:  word='dumpy'
+            if ans_num == 0:    word='myope'
+            elif ans_num == 1:  word='tunic'
+            elif ans_num == 2:  word='lards'
             else:
                 word=self.find_next_try()
                 word = [w for w in word if w not in guessed]
@@ -125,6 +125,7 @@ if __name__=='__main__':
     game_counter = 0
     num_solved = 0
     turns = []
+    auto = True
 
     while True:
 
@@ -134,7 +135,6 @@ if __name__=='__main__':
             stats_filename = 'stats.json'
             )
 
-        auto = True
         unwdl.answer = 'skill'
         answer = unwdl.word_provider()
         if game_counter > len(unwdl.wordlist): exit()
@@ -195,7 +195,7 @@ if __name__=='__main__':
                 print('\nPossible Answers')
                 print('-------- -------')
                 for thing in p[:5]: print(thing)
-                print(f'and {len(p[:5])} more')
+                print(f'and {len(p[:4])} more')
             turn_counter += 1
 
         print(f'\nrecorcd {num_solved/game_counter*100}%')
