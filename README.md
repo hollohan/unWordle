@@ -5,7 +5,7 @@ When prompted, input the word you have tried followed by the result from Wordle.
 
 unWordle will provide a list of valid words to use based on the input provided.  The process repeats and the list of options becomes refined.
 
-The strategy is based on elimination and a search with the following terms.
+The strategy is based on elimination and a few initial guesses:
 - myope
 - tunic
 - lards
