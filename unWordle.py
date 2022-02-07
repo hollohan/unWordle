@@ -197,7 +197,7 @@ if __name__=='__main__':
                 print(f'and {len(p[:4])} more')
             turn_counter += 1
         if auto: clear_srcrn()
-        print(f'\nrecorcd {num_solved/game_counter*100}%')
+        print(f'\nrecord {num_solved/game_counter*100}%')
         print(f'avg turns: {sum(turns)/len(turns)}\n')
         if not auto: break
     print(f'{grn}:){endc}')
