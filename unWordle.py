@@ -1,8 +1,8 @@
 import json
 from random import choice
+from os import system
 
-from sympy import solve_undetermined_coeffs
-
+clear_srcrn = lambda: system('cls')
 ylw  = '\033[93m'
 grn  = '\033[92m'
 endc = '\033[0m'
@@ -128,7 +128,6 @@ if __name__=='__main__':
     auto = False
 
     while True:
-
         # create unWordle object
         unwdl = unWordle(
             words_filename = 'words.json',
@@ -142,7 +141,7 @@ if __name__=='__main__':
         next_game=False
 
         unwdl.answer = choice(unwdl.wordlist)
-        print(f'{"-"*6} game# {game_counter} --- {unwdl.answer} {"-"*6}')
+        if auto: print(f'{"-"*6} game# {game_counter} --- {unwdl.answer} {"-"*6}')
         while True:
             # input 5 letter word
             if not auto: print(f'\nTurn {turn_counter}')
@@ -152,7 +151,7 @@ if __name__=='__main__':
                 #print(f'enter guess: {guess}')
             else: guess = input('enter guess: ')
             # confirm 5 chars input
-            if len(guess) != 5 or any([c.isnumeric() for c in guess]): continue
+            if len(guess) != 5 or any([not c.isalpha() for c in guess]): continue
 
             while True:
                 # input encoded result
@@ -197,7 +196,8 @@ if __name__=='__main__':
                 for thing in p[:5]: print(thing)
                 print(f'and {len(p[:4])} more')
             turn_counter += 1
-
+        if auto: clear_srcrn()
         print(f'\nrecorcd {num_solved/game_counter*100}%')
         print(f'avg turns: {sum(turns)/len(turns)}\n')
-        if not auto: exit()
+        if not auto: break
+    print(f'{grn}:){endc}')
