@@ -130,8 +130,8 @@ if __name__=='__main__':
     while True:
         # create unWordle object
         unwdl = unWordle(
-            words_filename = 'words.json',
-            stats_filename = 'stats.json'
+            words_filename = 'getData/words.json',
+            stats_filename = 'getData/stats.json'
             )
 
         unwdl.answer = 'skill'
