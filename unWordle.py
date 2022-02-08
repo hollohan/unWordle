@@ -35,25 +35,20 @@ class unWordle():
         for thing in s: self.stats[thing[0]] = thing[1]
 
     def find_next_try(self):
-
-        letter_at = self.letters_exact
-        letters_contained = self.letters_partial
-        letters_not = self.letters_not
-
         exact_matches  = []
         # find words with exact matches
         for word in self.wordlist:
-            matches = [True if word[letter[1]] == letter[0] else False for letter in letter_at]
+            matches = [True if word[letter[1]] == letter[0] else False for letter in self.letters_exact]
             if all(matches): exact_matches.append(word)
         # find words with partial matches
         partial_matches = []
         for word in exact_matches:
-            matches = [True if letter in word else False for letter in letters_contained]
+            matches = [True if letter in word else False for letter in self.letters_partial]
             if all(matches): partial_matches.append(word)
         # find words without letters_not
         noneless_matches = []
         for word in partial_matches:
-            matches = [True if letter not in word else False for letter in letters_not]
+            matches = [True if letter not in word else False for letter in self.letters_not]
             if all(matches): noneless_matches.append(word)
         #print(f'noneless_matches=')
 
@@ -146,9 +141,7 @@ if __name__=='__main__':
             # input 5 letter word
             if not auto: print(f'\nTurn {turn_counter}')
             if not auto: print('----')
-            if auto:
-                guess = next(answer)
-                #print(f'enter guess: {guess}')
+            if auto: guess = next(answer)
             else: guess = input('enter guess: ')
             # confirm 5 chars input
             if len(guess) != 5 or any([not c.isalpha() for c in guess]): continue
