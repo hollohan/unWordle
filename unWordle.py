@@ -1,6 +1,7 @@
 import json
 from random import choice
 from os import system
+from string import ascii_lowercase as alphabet
 
 clear_srcrn = lambda: system('cls')
 ylw  = '\033[93m'
@@ -123,6 +124,21 @@ class unWordle():
             yield word
             ans_num += 1
 
+    def recalc_stats(self, words):
+        results = {}
+        # initializez results
+        for letter in alphabet: results[letter] = 0
+        # count letter occurrences
+        for word in words:
+            for letter in alphabet:
+                if letter in word:
+                    results[letter] += 1
+
+        print(f'\tletters counted...')
+        # convert results to list and sort
+        s = [(x, results[x]) for x in results]
+        s = sorted(s, key=lambda x: x[1])[::-1]
+        for thing in s: self.stats[thing[0]] = thing[1]
 
 
 if __name__=='__main__':
@@ -153,7 +169,7 @@ if __name__=='__main__':
             if not auto: print(f'\nTurn {turn_counter}')
             if not auto: print('----')
             if auto: guess = next(answer)
-            else: guess = input('enter guess: ')
+            else: guess = input('enter guess: ').lower()
             # confirm 5 chars input
             if len(guess) != 5 or any([not c.isalpha() for c in guess]): continue
 
@@ -192,6 +208,7 @@ if __name__=='__main__':
 
             if not auto: 
                 p = unwdl.find_next_try()
+                unwdl.recalc_stats(p)
                 p = [[x, unwdl.calc_word_weight(x)] for x in p]
                 p = sorted(p, key=lambda x: x[1])[::-1]
                 print('\nPossible Answers')
