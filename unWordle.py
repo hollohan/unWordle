@@ -17,46 +17,54 @@ class unWordle():
         self.stats = {}
         self.answer = None
 
-        # load wordlist from file
-        # load letter stats
+        # load wordlist / stats from file
         self.load_wordlist(words_filename)
         self.load_stats(stats_filename)
 
     def load_wordlist(self, words_filename):
         # write data to file
-        with open(words_filename, 'r') as file: #with open('words.json', 'r') as file:
+        with open(words_filename, 'r') as file:
             self.wordlist = json.load(file)
 
     def load_stats(self, stats_filename):
         # write results to file
         s = 0
-        with open(stats_filename, 'r') as file: # with open('stats.json', 'r') as file:
+        with open(stats_filename, 'r') as file:
             s = json.load(file)
         for thing in s: self.stats[thing[0]] = thing[1]
+
+    
+    def contains_letters_exact (self, word):
+        matches = [True if word[letter[1]] == letter[0] else False for letter in self.letters_exact]
+        if all(matches): return True    # all([]) == True
+        return False
+
+    def contains_letters_partial(self, word):
+        matches = [True if letter in word else False for letter in self.letters_partial]
+        if all(matches): return True
+        return False
+
+    def without_letters_not(self, word):
+        matches = [True if letter not in word else False for letter in self.letters_not]
+        if all(matches): return True
+        return False
+
+    def without_letters_notexact(self, word):
+        matches = [True if word[letter[1]] != letter[0] else False for letter in self.letters_not_exact]
+        if all(matches): return True
+        return False
 
     def find_next_try(self):
         exact_matches  = []
         # find words with exact matches
-        for word in self.wordlist:
-            matches = [True if word[letter[1]] == letter[0] else False for letter in self.letters_exact]
-            if all(matches): exact_matches.append(word)
-        # find words with partial matches
-        partial_matches = []
-        for word in exact_matches:
-            matches = [True if letter in word else False for letter in self.letters_partial]
-            if all(matches): partial_matches.append(word)
-        # find words without letters_not
-        noneless_matches = []
-        for word in partial_matches:
-            matches = [True if letter not in word else False for letter in self.letters_not]
-            if all(matches): noneless_matches.append(word)
-        #print(f'noneless_matches=')
-
-        matches_not_exact = []
-        for word in noneless_matches:
-            matches = [True if word[letter[1]] != letter[0] else False for letter in self.letters_not_exact]
-            if all(matches): matches_not_exact.append(word)
-        return matches_not_exact
+        
+        matches = [word for word in self.wordlist
+            if self.contains_letters_exact(word)
+            and self.contains_letters_partial(word)
+            and self.without_letters_not(word)
+            and self.without_letters_notexact(word)
+            ]
+        return matches
 
     def decode_result(self, guess, result):
         colorized_response = ''
@@ -71,7 +79,10 @@ class unWordle():
                 colorized_response += f'{ylw}{guess[i]}{endc} '
                 self.letters_partial = list(set(self.letters_partial))
             elif result[i] == '-':
-                self.letters_not.append(guess[i])
+                if guess[i] in [x[0] for x in self.letters_exact + self.letters_not_exact]:
+                    self.letters_not_exact.append((guess[i], i))
+                else:
+                    self.letters_not.append(guess[i])
                 colorized_response += guess[i] + ' '
                 self.letters_not = list(set(self.letters_not))
             else: return 0
@@ -173,7 +184,6 @@ if __name__=='__main__':
                 print()
                 break
 
-
             #print(f'\nSummary')
             #print(f'-------')
             #print(f'{unwdl.letters_exact=}')
@@ -186,8 +196,7 @@ if __name__=='__main__':
                 p = sorted(p, key=lambda x: x[1])[::-1]
                 print('\nPossible Answers')
                 print('-------- -------')
-                for thing in p[:5]: print(thing)
-                print(f'and {len(p[:4])} more')
+                for thing in p: print(thing)
             turn_counter += 1
         if auto: clear_srcrn()
         print(f'\nrecord {num_solved/game_counter*100}%')
