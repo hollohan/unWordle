@@ -165,7 +165,7 @@ if __name__=='__main__':
         unwdl.answer = choice(unwdl.wordlist)
         if auto: print(f'{"-"*6} game# {game_counter} --- {unwdl.answer} {"-"*6}')
         while True:
-            # input 5 letter word
+            # input guess
             if not auto: print(f'\nTurn {turn_counter}')
             if not auto: print('----')
             if auto: guess = next(answer)
@@ -192,6 +192,7 @@ if __name__=='__main__':
                     turns.append(turn_counter)
                     break
                 else: break
+
             cr = unwdl.decode_result(guess, enc_result)
             print(f'\t{cr}')
 
@@ -215,8 +216,11 @@ if __name__=='__main__':
                 print('-------- -------')
                 for thing in p: print(thing)
             turn_counter += 1
+
         if auto: clear_srcrn()
+        
         print(f'\nrecord {num_solved/game_counter*100}%')
         print(f'avg turns: {sum(turns)/len(turns)}\n')
+
         if not auto: break
     print(f'{grn}:){endc}')
